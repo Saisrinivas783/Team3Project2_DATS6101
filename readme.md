@@ -5,6 +5,7 @@ Team Members(Team-3)
 3) Sai Srinivas Lakkoju
 
 Introduction
+
 In the realm of modern finance, the timely repayment of loans is of paramount importance for 
 both lenders and borrowers. The core focus of our project revolves around the predictive 
 analysis of loan approval based on an applicant's repayment history. By leveraging cutting edge 
@@ -14,6 +15,7 @@ institutions to make more informed decisions regarding loan approvals, thereby r
 and enhancing the overall lending experience.
 
 Data Set Information
+
 Our dataset contains 307,511 observations, which means that we have data on over 300,000 
 loan applicants. Each applicant is represented by 122 different pieces of information, such as 
 their gender, income, education status, and employment status.
