@@ -1,0 +1,82 @@
+library(data.table)
+library(readr)
+library(dplyr)
+
+# Reading data using fread in data.table
+train <- fread("../input/application_train.csv", na.strings = c("NA", "NaN", "?", "", "XNA"))
+test <- fread("../input/application_test.csv", na.strings = c("NA", "NaN", "?", "", "XNA"), showProgress = FALSE)
+dt1 <- fread('../input/application_train.csv', showProgress = FALSE)
+
+# Reading data using read_csv in dplyr
+app <- read_csv("../input/application_train.csv") %>% mutate(TARGET = as.factor(TARGET))
+
+str(train)
+
+cat("application_train : (", nrow(train), ",", ncol(train), ")\n")
+cat("application_test : (", nrow(test), ",", ncol(test), ")\n")
+
+# Variables and Functions
+colour.mapping <- c('1' = '#FFC000', '0' = '#D9D9D9')
+
+gg.theme <- list(theme_light(), scale_fill_manual(values=colour.mapping))  # This is used for all the charts
+
+short.num <- function(num) { 
+  div <- findInterval(num, c(0, 1e3, 1e6, 1e9, 1e12))
+  out <- paste0(round(num/10^(3*(div-1)), 2), c("","K","M","B","T")[div])
+  return(out)
+}
+
+clean.names <- function(df) {
+  new.names <- df %>% names %>% tolower %>% str_replace_all('_', ' ') %>% tools::toTitleCase()
+  df %<>% setNames(new.names) 
+  return(df)
+}
+
+add.counts.and.plot <- function(df, axis.angle=0, scales='free', reorder=T, melt=T) {
+  
+  if (melt) {df %<>% clean.names %>% melt('Target') }  
+  df %<>%
+    group_by(variable, value, Target) %>%
+    summarise(Count=n()) %>%
+    mutate(Percent=Count/sum(Count))
+
+  if (reorder) {df$value %<>% reorder(-df$Count)}
+  
+  # If angle is not 0 (so 90 degrees), it would rotate and adjust the positions of the labels
+  if (axis.angle==0) {
+    axis.text.x <- element_text()
+  } else {
+    axis.text.x <- element_text(angle = axis.angle, hjust=1, vjust=0.5)
+  }
+  
+  gg.layer <- list(gg.theme,
+                   geom_bar(stat='identity'),
+                   facet_wrap('variable', nrow = 1, scales=scales),
+                   scale_y_continuous(na.value = ''),
+                   theme(axis.ticks.x=element_blank(), axis.title.x = element_blank()))
+  
+  plot.cnt <- ggplot(df, aes(value, Count  , fill=Target)) + gg.layer + 
+    scale_y_continuous(labels=short.num) + theme(axis.text.x = element_blank())
+  plot.pct <- ggplot(df, aes(value, Percent, fill=Target)) + gg.layer + 
+    scale_y_continuous(labels=percent  ) + theme(axis.text.x = axis.text.x    )
+  
+  plot <- gridExtra::grid.arrange(plot.cnt, plot.pct)
+  return(plot)
+}
+
+index_to_col <- function(data, Column_Name) {
+  data <- cbind(newColName = rownames(data), data)
+  rownames(data) <- 1:nrow(data)
+  colnames(data)[1] <- Column_Name
+  return(data)
+}
+
+plotHist <- function(data_in, i) {
+  data <- data.frame(x = data_in[[i]])
+  p <- ggplot(data = data, aes(x = x)) +
+    geom_histogram(bins = 100, fill = "#0072B2", alpha = 0.9) +
+    xlab(colnames(data_in)[i]) +
+    theme_light() +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  return(p)
+}
