@@ -1,6 +1,6 @@
 ---
 title: "HW 8: Linear Models with Categorical Regressors"
-author: "Your Name"
+author: "Project 2 "
 date: "`r Sys.Date()`"
 output:
   html_document:
