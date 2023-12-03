@@ -1,0 +1,142 @@
+---
+title: "HW 8: Linear Models with Categorical Regressors"
+author: "Your Name"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    code_folding: hide
+    number_sections: false
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+---
+```{r init, include=F}
+library(ezids)
+library(data.table)
+library(dplyr)
+library(ggplot2)
+library(magrittr)
+library(forcats)
+library(stringr)
+library(scales)
+```
+
+```{r setup, include=FALSE}
+# Some of common RMD options (and the defaults) are: 
+# include=T, eval=T, echo=T, results='hide'/'asis'/'markup',..., collapse=F, warning=T, message=T, error=T, cache=T, fig.width=6, fig.height=4, fig.dim=c(6,4) #inches, fig.align='left'/'center','right', 
+knitr::opts_chunk$set(warning = F, message = F)
+# Can globally set option for number display format.
+options(scientific=T, digits = 3) 
+# options(scipen=9, digits = 3) 
+```
+
+```{r}
+app_train <- read.csv('application_train.csv')
+print(dim(app_train))
+head(app_train)
+```
+The training data has 307511 rows i.e. each one a separate loan and 122 features/columns including the TARGET (the label we want to predict).
+
+```{r}
+app_test <- read.csv('application_test.csv')
+print(dim(app_test))
+head(app_test)
+```
+
+The testing data has 48744 rows i.e. each one a separate loan and 121 features/columns which does not include the TARGET column. Testing dataset is considerably smaller than train data.
+
+```{r}
+table(app_train$TARGET)
+
+```
+
+
+```{r}
+app_train$TARGET <- as.integer(app_train$TARGET)
+hist(app_train$TARGET, xlab = 'TARGET', main = 'Histogram of TARGET column')
+```
+The dataset exhibits a significant class imbalance, with approximately 91.93% of the data belonging to one class and merely 8.07% to the other. Specifically, a substantial majority of loans were repaid on time compared to the minority of loans that were not repaid. In more advanced machine learning models, addressing this imbalance can be accomplished by assigning weights to the classes based on their representation in the dataset, ensuring a more reflective learning process
+
+```{r}
+missing_values_summary <- function(data) {
+  missing_count <- colSums(is.na(data))
+  missing_percentage <- round((missing_count / nrow(data)) * 100, 2)
+  missing_df <- data.frame(
+    Column = names(missing_count),
+    Missing_Values = missing_count,
+    Missing_Percentage = missing_percentage
+  )
+  return(missing_df[order(-missing_df$Missing_Percentage), ])
+}
+
+missing_summary <- missing_values_summary(app_train)
+print(missing_summary)
+
+```
+
+
+```{r}
+count_columns_with_nulls <- function(data) {
+  columns_with_nulls <- sum(colSums(is.na(data)) > 0)
+  cat("Number of columns with missing values:", columns_with_nulls, "\n")
+}
+
+# Call the function with your dataframe (e.g., app_train)
+count_columns_with_nulls(app_train)
+```
+
+
+```{r}
+data_types <- sapply(app_train, function(x) class(x))
+data_types_counts <- table(data_types)
+
+# Print the counts of each data type
+print(data_types_counts)
+```
+
+
+```{r}
+object_columns <- sapply(app_train, function(x) is.character(x) | is.factor(x))
+unique_counts <- sapply(app_train[, object_columns], function(x) length(unique(x)))
+
+# Print the counts of unique values in object-type columns
+print(unique_counts)
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
