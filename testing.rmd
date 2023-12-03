@@ -9,9 +9,7 @@ dt1 <- fread('../input/application_train.csv', showProgress = FALSE)
 
 # Reading data using read_csv in dplyr
 app <- read_csv("../input/application_train.csv") %>% mutate(TARGET = as.factor(TARGET))
-
 str(train)
-
 cat("application_train : (", nrow(train), ",", ncol(train), ")\n")
 cat("application_test : (", nrow(test), ",", ncol(test), ")\n")
 
@@ -19,7 +17,6 @@ cat("application_test : (", nrow(test), ",", ncol(test), ")\n")
 colour.mapping <- c('1' = '#FFC000', '0' = '#D9D9D9')
 
 gg.theme <- list(theme_light(), scale_fill_manual(values=colour.mapping))  # This is used for all the charts
-
 short.num <- function(num) { 
   div <- findInterval(num, c(0, 1e3, 1e6, 1e9, 1e12))
   out <- paste0(round(num/10^(3*(div-1)), 2), c("","K","M","B","T")[div])
@@ -53,8 +50,7 @@ add.counts.and.plot <- function(df, axis.angle=0, scales='free', reorder=T, melt
                    geom_bar(stat='identity'),
                    facet_wrap('variable', nrow = 1, scales=scales),
                    scale_y_continuous(na.value = ''),
-                   theme(axis.ticks.x=element_blank(), axis.title.x = element_blank()))
-  
+                   theme(axis.ticks.x=element_blank(), axis.title.x = element_blank()))  
   plot.cnt <- ggplot(df, aes(value, Count  , fill=Target)) + gg.layer + 
     scale_y_continuous(labels=short.num) + theme(axis.text.x = element_blank())
   plot.pct <- ggplot(df, aes(value, Percent, fill=Target)) + gg.layer + 
@@ -63,14 +59,12 @@ add.counts.and.plot <- function(df, axis.angle=0, scales='free', reorder=T, melt
   plot <- gridExtra::grid.arrange(plot.cnt, plot.pct)
   return(plot)
 }
-
 index_to_col <- function(data, Column_Name) {
   data <- cbind(newColName = rownames(data), data)
   rownames(data) <- 1:nrow(data)
   colnames(data)[1] <- Column_Name
   return(data)
 }
-
 plotHist <- function(data_in, i) {
   data <- data.frame(x = data_in[[i]])
   p <- ggplot(data = data, aes(x = x)) +
