@@ -14,6 +14,7 @@ assess an applicant's likelihood of paying their loans on time. This model will 
 institutions to make more informed decisions regarding loan approvals, thereby reducing risks 
 and enhancing the overall lending experience.
 
+
 Data Set Information
 
 Our dataset contains 307,511 observations, which means that we have data on over 300,000 
