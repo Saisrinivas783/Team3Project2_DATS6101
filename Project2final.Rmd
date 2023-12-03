@@ -161,47 +161,221 @@ app_test <- one_hot_encode(app_test)
 ```
 
 ```{r}
-# Separate target variable from training data
-train_labels <- app_train$TARGET
-train_data <- app_train[, !names(app_train) %in% c("TARGET")]
 
-# Identify common columns between training and testing data
-common_columns <- intersect(names(app_train), names(app_test))
+column_names <- names(app_train)
+sapply(column_names, function(col) {
+  cat(col, class(app_train[[col]]), "\n")
+})
 
-# Select common columns from training data
-aligned_train_data <- app_train[, common_columns]
-
-# Select common columns from testing data
-aligned_test_data <- app_test[, common_columns]
-
-# Add target variable back to aligned training data
-aligned_training_data <- cbind(aligned_train_data, train_labels)
-
-# Print shapes of aligned training and testing data
-print(paste("Training Features shape:", dim(aligned_training_data)))
-print(paste("Testing Features shape:", dim(aligned_test_data)))
 ```
 
+
+```{r}
+age_years <- app_train$DAYS_BIRTH / -365
+summary(age_years)
+```
+
+
+```{r}
+summary(app_train$DAYS_EMPLOYED)
+
+```
+
+```{r}
+hist(app_train$DAYS_EMPLOYED,
+     main = 'Days Employment Histogram',
+     xlab = 'Days Employment',
+     ylab = 'Frequency')
+
+```
+
+
+```{r}
+anom <- subset(app_train, DAYS_EMPLOYED == 365243)
+non_anom <- subset(app_train, DAYS_EMPLOYED != 365243)
+
+# Calculate the percentage of loans defaulted for anomalies and non-anomalies
+non_anom_default_rate <- mean(non_anom$TARGET) * 100
+anom_default_rate <- mean(anom$TARGET) * 100
+
+# Count the number of anomalous values in the 'DAYS_EMPLOYED' column
+anom_count <- length(anom$DAYS_EMPLOYED)
+
+# Print the results
+cat(sprintf("The non-anomalies default on %.2f%% of loans\n", non_anom_default_rate))
+cat(sprintf("The anomalies default on %.2f%% of loans\n", anom_default_rate))
+cat(sprintf("There are %d anomalous values in column days of employment\n", anom_count))
+```
+
+
+```{r}
+# Assuming 'app_train' is a dataframe in R containing the columns 'DAYS_EMPLOYED' and 'DAYS_EMPLOYED_ANOM'
+# You can create a new variable 'DAYS_EMPLOYED_ANOM' by checking for anomalous values
+
+app_train$DAYS_EMPLOYED_ANOM <- ifelse(app_train$DAYS_EMPLOYED == 365243, TRUE, FALSE)
+
+# Replace the anomalous values with NA (equivalent to np.nan in Python)
+app_train$DAYS_EMPLOYED[app_train$DAYS_EMPLOYED == 365243] <- NA
+
+# Plot histogram for 'DAYS_EMPLOYED'
+hist(app_train$DAYS_EMPLOYED, main = 'Days Employment Histogram', xlab = 'Days Employment', col = 'skyblue')
+
+
+```
+
+```{r}
+summary(app_train$DAYS_REGISTRATION)
+```
+
+```{r}
+summary(app_train$DAYS_REGISTRATION)
+```
+
+```{r}
+summary(app_train$DAYS_ID_PUBLISH)
+```
+
+```{r}
+summary(app_train$OWN_CAR_AGE)
+
+```
+
+```{r}
+app_test$DAYS_EMPLOYED_ANOM <- ifelse(app_test$DAYS_EMPLOYED == 365243, TRUE, FALSE)
+
+# Replace specific values with NA (equivalent to np.nan in Python)
+app_test$DAYS_EMPLOYED[app_test$DAYS_EMPLOYED == 365243] <- NA
+```
+
+```{r}
+numeric_columns <- sapply(app_train, is.numeric)
+numeric_data <- app_train[, numeric_columns]
+
+# Calculate correlations
+correlations <- cor(numeric_data)[,"TARGET"]
+
+# Sort correlations
+sorted_correlations <- sort(correlations)
+
+# Display most positive correlations
+cat("Most Positive Correlations:\n")
+tail(sorted_correlations, 15)
+
+# Display most negative correlations
+cat("\nMost Negative Correlations:\n")
+head(sorted_correlations, 15)
+```
+
+```{r}
+hist(app_train$DAYS_BIRTH / -365, breaks = 50, col = "skyblue", border = "black",
+     main = "Age of Client", xlab = "Age (years)", ylab = "Count")
+```
+
+```{r}
+library(ggplot2)
+
+# Filter data for loans repaid on time and not repaid on time
+repaid_on_time <- subset(app_train, TARGET == 0)
+not_repaid_on_time <- subset(app_train, TARGET == 1)
+
+# Create KDE plot for loans repaid on time
+ggplot() +
+  geom_density(data = repaid_on_time, aes(x = DAYS_BIRTH / -365), color = "blue", fill = "skyblue", alpha = 0.5) +
+  geom_density(data = not_repaid_on_time, aes(x = DAYS_BIRTH / -365), color = "red", fill = "salmon", alpha = 0.5) +
+  labs(x = "Age (years)", y = "Density", title = "Distribution of Ages") +
+  theme_minimal()
+```
+
+```{r}
+age_data <- app_train[, c("TARGET", "DAYS_BIRTH")]
+
+# Calculating age in years and adding a new column
+age_data$YEARS_BIRTH <- age_data$DAYS_BIRTH / -365  # Assuming negative days represent age
+
+# Binning the age data into intervals
+age_data$YEARS_BINNED <- cut(age_data$YEARS_BIRTH, breaks = c(20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70))
+
+# Displaying the first few rows
+head(age_data)
+age_groups <- aggregate(age_data[c("TARGET", "YEARS_BIRTH")], by = list(age_data$YEARS_BINNED), FUN = mean)
+
+# Renaming columns in the resulting dataframe
+colnames(age_groups) <- c("YEARS_BINNED", "TARGET_mean", "YEARS_BIRTH_mean")
+
+# Display the resulting dataframe
+print(age_groups)
+
+barplot(100 * age_groups$TARGET_mean, 
+        names.arg = as.character(age_groups$YEARS_BINNED), 
+        xlab = "Age Group (years)", 
+        ylab = "Failure to Repay (%)",
+        main = "Failure to Repay by Age Group",
+        col = "skyblue",
+        ylim = c(0, max(100 * age_groups$TARGET_mean) + 5))  # Set ylim slightly above the maximum value
+
+# Rotate x-axis labels
+par(las = 2)
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
 
 ```{r}
 
 ```
 
 
-```{r}
-
-```
-
-```{r}
-
-```
 
 
-```{r}
-
-```
 
 
-```{r}
 
-```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
