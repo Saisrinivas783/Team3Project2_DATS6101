@@ -105,16 +105,81 @@ print(unique_counts)
 
 
 ```{r}
+le_count <- 0
+for (col in names(app_train)) {
+  # Check if the column is of type 'character' or 'factor'
+  if (is.character(app_train[[col]]) || is.factor(app_train[[col]])) {
+    # If 2 or fewer unique categories
+    if (length(unique(app_train[[col]])) <= 2) {
+      # Convert to factor and encode the levels
+      app_train[[col]] <- factor(app_train[[col]])
+      app_test[[col]] <- factor(app_test[[col]])
+      
+      # Keep track of how many columns were label encoded
+      le_count <- le_count + 1
+    }
+  }
+}
 
+cat(sprintf("%d columns were label encoded.\n", le_count))
 ```
 
 
 ```{r}
+library(caret)
+
+one_hot_encode <- function(data) {
+  # Identify non-numeric and non-integer columns
+  non_numeric_cols <- names(data)[!sapply(data, is.numeric) & !sapply(data, is.integer)]
+  
+  # Exclude non-numeric and non-integer columns from encoding
+  categorical_cols <- setdiff(names(data), non_numeric_cols)
+  
+  # Exclude the "TARGET" column, assuming it's your response variable
+  categorical_cols <- setdiff(categorical_cols, "TARGET")
+  
+  if (length(categorical_cols) == 0) {
+    # No columns found for one-hot encoding
+    return(data)
+  }
+  
+  # Perform one-hot encoding using caret's dummyVars
+  formula_text <- as.formula(paste("~ . + 0"))
+  dummy_formula <- dummyVars(formula_text, data = data[, categorical_cols, drop = FALSE])
+  encoded_data <- predict(dummy_formula, newdata = data[, categorical_cols, drop = FALSE])
+  
+  # Combine original and encoded columns
+  final_data <- cbind(data, encoded_data)
+  
+  return(final_data)
+}
+
+
+app_train <- one_hot_encode(app_train)
+app_test <- one_hot_encode(app_test)
 
 ```
 
 ```{r}
+# Separate target variable from training data
+train_labels <- app_train$TARGET
+train_data <- app_train[, !names(app_train) %in% c("TARGET")]
 
+# Identify common columns between training and testing data
+common_columns <- intersect(names(app_train), names(app_test))
+
+# Select common columns from training data
+aligned_train_data <- app_train[, common_columns]
+
+# Select common columns from testing data
+aligned_test_data <- app_test[, common_columns]
+
+# Add target variable back to aligned training data
+aligned_training_data <- cbind(aligned_train_data, train_labels)
+
+# Print shapes of aligned training and testing data
+print(paste("Training Features shape:", dim(aligned_training_data)))
+print(paste("Testing Features shape:", dim(aligned_test_data)))
 ```
 
 
