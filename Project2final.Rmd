@@ -84,6 +84,7 @@ count_columns_with_nulls <- function(data) {
 # Call the function with your dataframe (e.g., app_train)
 count_columns_with_nulls(app_train)
 ```
+Number of columns with missing values: 61 
 
 
 ```{r}
@@ -93,7 +94,9 @@ data_types_counts <- table(data_types)
 # Print the counts of each data type
 print(data_types_counts)
 ```
-
+Character (String): 16 variables
+Integer: 41 variables
+Numeric (Floating-point): 65 variables
 
 ```{r}
 object_columns <- sapply(app_train, function(x) is.character(x) | is.factor(x))
