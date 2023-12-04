@@ -126,7 +126,7 @@ for (col in names(app_train)) {
 
 cat(sprintf("%d columns were label encoded.\n", le_count))
 ```
-
+3 columns are label encoded.
 
 ```{r}
 library(caret)
