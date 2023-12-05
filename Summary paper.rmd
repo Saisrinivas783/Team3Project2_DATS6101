@@ -116,3 +116,84 @@ External Data Sources  EXT_SOURCE Variables:
    EXT_SOURCE_3 shows the most significant difference in target values.
    Variables likely useful for machine learning, though the relationship is not very strong.
 
+
+
+Feature Engineering  Polynomial Features:
+ Method: Created polynomial features using EXT_SOURCE variables and DAYS_BIRTH.
+ Degree: Features expanded up to the third degree.
+ Result:
+   Generated 35 new features.
+   Some new variables exhibit stronger correlations with the target than original features.
+   Will be evaluated for model performance improvement.
+
+Domain Knowledge Features:
+ Features Created:
+  1. CREDIT_INCOME_PERCENT: Credit amount as a percentage of client's income.
+  2. ANNUITY_INCOME_PERCENT: Loan annuity as a percentage of client's income.
+  3. CREDIT_TERM: Length of payment in months (annuity divided by credit).
+  4. DAYS_EMPLOYED_PERCENT: Percentage of days employed relative to client's age.
+ Visualization:
+   KDE plots illustrate distribution by target value for each new feature.
+   These features are expected to capture financial insights and may contribute to predicting loan repayment.
+
+Summary:
+ Identified strong correlations in external data sources (EXT_SOURCE_1, EXT_SOURCE_2, EXT_SOURCE_3) with loan repayment.
+ Applied polynomial feature engineering to capture interactions and higherorder relationships.
+ Introduced domain knowledge features representing financial ratios and employment insights.
+ Visualizations support the relevance of these features in predicting loan repayment.
+ Prepared datasets for model training with new features: polynomial and domain knowledge features added.
+
+
+Model Baseline  Logistic Regression:
+ Naive Baseline:
+   Random guessing would yield an AUC ROC of 0.5.
+   Logistic Regression sets a low initial performance bar.
+ Logistic Regression Implementation:
+   Utilized all features after categorical encoding.
+   Imputed missing values and normalized feature ranges.
+   Set regularization parameter (C) to 0.0001 for reduced overfitting.
+   Model Score: 0.67887
+
+Random Forest Implementation:
+ Random Forest Classifier:
+   Applied Random Forest with 100 trees.
+   Extracted feature importances.
+Model Score: 0.67877
+
+Feature Engineered Model: Polynomial Features:
+ Implementation:
+   Introduced polynomial features with degree 3.
+   Imputed missing values and normalized features.
+   Random Forest Classifier trained on new features.
+   Model Score: 0.60467
+ Observation:
+   Polynomial features did not improve model performance significantly.
+
+Feature Engineered Model: Domain Knowledge Features:
+ Implementation:
+   Introduced domain knowledge features.
+   Imputed missing values and normalized features.
+   Random Forest Classifier trained on new features.
+   Model Score: 0.67996
+ Observation:
+   Limited improvement observed with domain knowledge features.
+
+Model Interpretation: Feature Importances:
+ Feature Importance Analysis:
+   Utilized Random Forest feature importances.
+   Identified significant features influencing predictions.
+   Insightful for potential dimensionality reduction.
+Light Gradient Boosting Machine:
+ Implementation:
+   Used LightGBM for model training and testing.
+   Employed crossvalidation (5 folds).
+ Observation:
+   Model performance and feature importance analysis can further guide model improvement.
+  
+Summary:
+ Established baseline models (Logistic Regression, Random Forest).
+ Explored feature engineering with polynomial and domain knowledge features.
+ Investigated model interpretability using feature importances.
+ Introduced LightGBM for potential enhanced performance.
+ Ongoing model refinement and exploration of advanced techniques.
+
