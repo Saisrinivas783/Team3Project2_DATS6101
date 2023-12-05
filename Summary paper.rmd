@@ -3,9 +3,7 @@ In the realm of modern finance, the timely repayment of loans is of paramount im
 Our dataset contains 307,511 observations, which means that we have data on over 300,000 loan applicants. Each applicant is represented by 122 different pieces of information, such as their gender, income, education status, and employment status.
 
 
-
 FOR PRESENTATION - need to focus on why this model and what we learned from this model, only 1 or 2 slides for EDA
-
 
 EDA
 
