@@ -34,3 +34,47 @@ MODEL
  model interpretation : feature importance
  light gradient boosting machine
  Conclusion
+
+
+PPT and Summary paper
+Examining TARGET Column Distribution:
+ Imbalanced data with 91.93% in class 0 and 8.07% in class 1.
+ Potential class weight adjustment needed for sophisticated machine learning models.
+ Addressing missing values in preparation for ML model building.
+
+Checking DataTypes of Columns:
+ Float64: 65 columns
+ Int64: 41 columns
+ Object (Categorical): 16 columns
+
+Encoding Categorical Variables:
+ Two main methods: Label encoding and onehot encoding.
+ Label encoding for binary categorical variables, onehot encoding for others.
+ Potential use of PCA or dimensionality reduction for feature explosion in onehot encoding.
+
+Aligning Training and Testing Data:
+ Ensuring same features in both datasets for consistency.
+ Extracting and aligning target column.
+ Resulting in 307,511 training features and 48,744 testing features after alignment.
+
+Anomalies in Data:
+ Detected anomalies using statistics, focusing on `DAYS_EMPLOYED` column.
+ Found anomalies with a maximum value of about 1,000 years, impacting data distribution.
+ Anomalous clients exhibit a lower rate of default (5.40%) compared to nonanomalous clients (8.66%).
+
+Handling Anomalies:
+ Created a flag column `DAYS_EMPLOYED_ANOM` to identify anomalous values.
+ Replaced anomalous values with NaN and visualized the updated distribution.
+ Ensured consistency between training and testing data by applying changes to both.
+
+Other Columns with DAYS:
+ Checked other columns with DAYS, including `DAYS_REGISTRATION`, `DAYS_ID_PUBLISH`, and `OWN_CAR_AGE`.
+ No obvious outliers detected in these columns.
+
+Important Note:
+ Emphasized the need to apply any data manipulations done on the training data to the testing data for consistency in model building.
+
+Handling Anomalies in Test Data:
+ Applied anomaly handling procedures to the test data for consistency.
+ Identified 9,274 anomalies in the test data, constituting approximately 19.03% of the entries.
+
