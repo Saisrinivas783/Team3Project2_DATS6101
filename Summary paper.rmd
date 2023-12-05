@@ -197,3 +197,48 @@ Summary:
  Introduced LightGBM for potential enhanced performance.
  Ongoing model refinement and exploration of advanced techniques.
 
+Light Gradient Boosting Machine (LGBM) Model:
+Model Function:
+Utilized LGBM for training and testing with crossvalidation.
+Parameters: Training features, test features, encoding method, and number of folds.
+Data Preparation:
+Extracted IDs, labels, and features from input data.
+Applied onehot encoding or label encoding based on user choice.
+Model Training:
+Employed LGBMClassifier with specified hyperparameters.
+Trained on each fold of the data with early stopping.
+Recorded feature importances and model predictions.
+Performance Metrics:
+Evaluated model performance using ROC AUC.
+Computed training and validation metrics for each fold and overall.
+Baseline Model Results:
+Training Data Shape: (307511, 239)
+Testing Data Shape: (48744, 239)
+Training Logs:
+Iterations: 200, Train AUC: 0.798723, Valid AUC: 0.755039
+Iterations: 400, Train AUC: 0.82838, Valid AUC: 0.755107
+Baseline Metrics:
+Foldwise and overall ROC AUC scores for training and validation.
+Overall AUC: Train  0.813034, Valid  0.758705
+Baseline Submission Score:
+Score: 0.73469
+Domain Knowledge Feature Model Results:
+Training Data Shape: (307511, 243)
+Testing Data Shape: (48744, 243)
+Training Logs:
+Iterations: 200, Train AUC: 0.804779, Valid AUC: 0.762511
+Iterations: 400, Train AUC: 0.834559, Valid AUC: 0.770511
+Domain Knowledge Metrics:
+Foldwise and overall ROC AUC scores for training and validation.
+Overall AUC: Train  0.817048, Valid  0.766186
+Domain Knowledge Submission Score:
+Score: 0.7544
+Feature Importances:
+Feature importance analysis for both baseline and domain knowledge models.
+Visualization of top features influencing predictions.
+Summary:
+LGBM model applied with crossvalidation for robust evaluation.
+Baseline model established with initial parameters.
+Domain knowledge features introduced for potential improvement.
+Comprehensive metrics and visualizations for model evaluation.
+Ongoing exploration for further model refinement.
