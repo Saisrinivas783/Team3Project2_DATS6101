@@ -78,3 +78,41 @@ Handling Anomalies in Test Data:
  Applied anomaly handling procedures to the test data for consistency.
  Identified 9,274 anomalies in the test data, constituting approximately 19.03% of the entries.
 
+
+Correlations:
+ Calculated Pearson correlation coefficients between features and the target variable.
+ Most features showed very weak correlations with the target.
+
+Positive Correlations:
+ Identified features with the most positive correlations with the target.
+   Notable features include `DAYS_EMPLOYED`, `DAYS_BIRTH`, and socioeconomic factors.
+
+Negative Correlations:
+ Listed features with the most negative correlations with the target.
+   Notable features include `EXT_SOURCE_3`, `EXT_SOURCE_2`, and `EXT_SOURCE_1`.
+
+Effect of Age on Repayment:
+ Analyzed the relationship between age (`DAYS_BIRTH`) and loan repayment.
+ Found a negative linear relationship, indicating that older clients tend to repay loans on time more often.
+ Created visualizations to support the analysis, highlighting the distribution of ages and repayment densities.
+
+Average Failure to Repay by Age Group:
+ Grouped ages into bins and calculated the average failure to repay loans for each group.
+ Discovered a clear trend: younger applicants are more likely to fail to repay loans.
+ Provided insights for the bank to consider precautionary measures for younger clients without discrimination.
+
+External Data Sources (EXT_SOURCE_1, EXT_SOURCE_2, EXT_SOURCE_3):
+ Noted that these features represent normalized scores from external data sources.
+ Identified these features as having the strongest negative correlations with the target variable.
+
+External Data Sources  EXT_SOURCE Variables:
+ Features Examined: EXT_SOURCE_1, EXT_SOURCE_2, EXT_SOURCE_3, DAYS_BIRTH
+ Correlation Analysis:
+   Negative correlations with the target variable.
+   As EXT_SOURCE values increase, clients are more likely to repay loans.
+   Positive correlation observed between EXT_SOURCE_1 and DAYS_BIRTH.
+ Distribution Visualization:
+   KDE plots depict the relationship between EXT_SOURCE variables and loan repayment.
+   EXT_SOURCE_3 shows the most significant difference in target values.
+   Variables likely useful for machine learning, though the relationship is not very strong.
+
