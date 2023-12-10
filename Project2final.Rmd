@@ -325,6 +325,34 @@ par(las = 2)
 ```
 
 ```{r}
+#ggplot(data = melted_cormat, aes(x=Var1, y=Var2, fill=value)) + 
+ # geom_tile(color = "white")+
+#scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limit = c(-1,1), space = "Lab", name="Pearson\nCorrelation") +
+ # labs(title='Correlation Heatmap')+
+ # theme(plot.title = element_text(hjust = .5), axis.text.x = element_text(angle=90),
+ #      axis.title.x=element_blank(),
+ #      axis.title.y=element_blank())+
+ # coord_fixed()+
+ # geom_text(aes(Var2, Var1, label = round(value,2)), color = "black", size = 3)
+
+library(reshape2)
+library(ggplot2)
+
+# Assuming 'cormat' is your correlation matrix
+cormat <- cor(mtcars)  # Replace with your actual data
+
+# Melt the correlation matrix
+melted_cormat <- melt(cormat)
+
+# Plot the heatmap
+ggplot(data = melted_cormat, aes(x = Var1, y = Var2, fill = value)) + 
+  geom_tile(color = "white") +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limit = c(-1,1), space = "Lab", name = "Pearson\nCorrelation") +
+  labs(title = 'Correlation Heatmap') +
+  theme(plot.title = element_text(hjust = .5), axis.text.x = element_text(angle = 90),
+        axis.title.x = element_blank(), axis.title.y = element_blank()) +
+  coord_fixed() +
+  geom_text(aes(Var2, Var1, label = round(value, 2)), color = "black", size = 3)
 
 ```
 
